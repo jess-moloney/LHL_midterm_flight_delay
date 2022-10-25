@@ -153,3 +153,4 @@ cython_debug/
 2_data/flights_random_sample.csv
 .gitignore
 2_data/passenger_random_sample.csv
+*.csv
