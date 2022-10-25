@@ -154,3 +154,5 @@ cython_debug/
 .gitignore
 2_data/passenger_random_sample.csv
 *.csv
+*.psql
+*.DS_Store
