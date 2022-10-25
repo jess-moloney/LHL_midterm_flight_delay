@@ -3,8 +3,9 @@ import pandas.io.sql as sqlio
 
 class lhl_delay_data:
     """
-    Pull from database for Lighthouse Labs Midterm Project
+    Access and pull from database for Lighthouse Labs Midterm Project
     """
+    
     def __init__ (self, host, database, user, password, seed = None):
         self.host = host
         self.database = database
@@ -21,6 +22,18 @@ class lhl_delay_data:
         )
 
     def sample_table(self, table: str, samples:int):
+        """
+        Randomly sample from LHL Database for the midterm project
+        :params:
+        table (str): Which of the three main tables
+                    ('flights','passengers','fuel_comsumption')
+                    to pull from
+        samples (int): max samples to pull
+                        (limited by number of samples in each table)
+
+        :return:
+        df_return (pandas.DataFrame): DataFrame containing the selected samples
+        """
         
         if table not in ['flights','passengers','fuel_comsumption']:
             print(f'Error: {table} is not recognized as a table name.')
