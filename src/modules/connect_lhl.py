@@ -26,7 +26,7 @@ class lhl_delay_data:
         Randomly sample from LHL Database for the midterm project
         :params:
         table (str): Which of the three main tables
-                    ('flights','passengers','fuel_comsumption')
+                    ('flights','passengers','fuel_comsumption','flights_test')
                     to pull from
         samples (int): max samples to pull
                         (limited by number of samples in each table)
@@ -35,7 +35,7 @@ class lhl_delay_data:
         df_return (pandas.DataFrame): DataFrame containing the selected samples
         """
         
-        if table not in ['flights','passengers','fuel_comsumption']:
+        if table not in ['flights','passengers','fuel_comsumption','flights_test']:
             print(f'Error: {table} is not recognized as a table name.')
 
         cur = self.connection().cursor()
@@ -44,7 +44,7 @@ class lhl_delay_data:
             query += f'SELECT SETSEED({self.seed}); '
         query += f'SELECT * FROM {table} '
        
-        if table != 'flights':
+        if table != 'flights' or table != 'flights_test':
             query += f'WHERE {table}.unique_carrier IN (SELECT op_unique_carrier FROM flights) '
         query += f'ORDER BY RANDOM() LIMIT {samples};'
 
