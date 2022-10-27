@@ -84,9 +84,9 @@ class test_models:
         y_test : testing target
         """
         if target is None:
-            X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(data)
+            X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(data, seed=123)
         else:
-            X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(data, target)
+            X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(data, target, seed=123)
 
         scaler = StandardScaler()
         scaler.fit(X_train)
