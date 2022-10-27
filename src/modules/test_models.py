@@ -29,7 +29,7 @@ class test_models:
             'lasso' : Lasso(),
             'polynomial' : self.polynomial_model(),
             'sgd' : SGDRegressor(),
-            'svr' : SVR(),
+            #'svr' : SVR(),
             'd_tree' : DecisionTreeRegressor(),
             'r_forest' : RandomForestRegressor(max_depth = self.max_depth),
             'g_boost' : GradientBoostingRegressor(),
@@ -42,6 +42,7 @@ class test_models:
                 ),
             'xgb' : xgboost.XGBRegressor(objective = 'reg:squarederror')
         }
+
 
     def polynomial_model(self):
         """
@@ -68,6 +69,7 @@ class test_models:
             for name in self.model_names:
                 self.active_models.append(self.models[name])
 
+
     def split_scale(self, data, target = None):
         """
         Splits and scales the data for the models
@@ -93,6 +95,7 @@ class test_models:
 
         return X_train, X_test, y_train, y_test
 
+
     def run_models(self):
         """
         Run all active models
@@ -111,7 +114,12 @@ class test_models:
             else:
                 lst_return.append(self.eval_model(self.fit_predict(model)))
 
-        return pandas.DataFrame(lst_return, columns=['MAE','RMSE','R2','ADJR2'], index = index_label, dtype = float)
+        return pandas.DataFrame(
+                    lst_return,
+                    columns=['MAE_test','MAE_train','RMSE_test','RMSE_train','R2_test','R2_train','ADJR2_test','ADJR2_train'],
+                    index = index_label, dtype = float
+                    )
+
 
     def fit_predict(self, model, poly = False):
         """
@@ -122,12 +130,17 @@ class test_models:
         :returns:
         y_pred : predicted target values
         """
+
         if poly:
             y_pred = model.fit(self.X_train_poly, self.y_train).predict(self.X_test_poly)
+            y_train_pred = model.fit(self.X_train_poly, self.y_train).predict(self.X_train_poly)
         else:
             y_pred = model.fit(self.X_train, self.y_train).predict(self.X_test)
+            y_train_pred = model.fit(self.X_train, self.y_train).predict(self.X_train)
 
-        return y_pred
+        return [y_pred, y_train_pred]
+
+        
 
 
     def eval_model(self, y_pred):
@@ -138,9 +151,14 @@ class test_models:
         :returns:
         Tuple of Mean Absolute Error, Root Mean Squared Error, R^2 Score, and Adjusted R^2 Score
         """
-        mae = mean_absolute_error(self.y_test, y_pred)
-        rmse = mean_squared_error(self.y_test, y_pred, squared=False)
-        r2 = r2_score(self.y_test, y_pred)
-        adj_r2 = 1 - (1 - r2) * (len(self.X_test) - 1) / (len(self.X_test) - len(self.X_test[0,:] - 1))
+        mae_test = mean_absolute_error(self.y_test, y_pred[0])
+        rmse_test = mean_squared_error(self.y_test, y_pred[0], squared=False)
+        r2_test = r2_score(self.y_test, y_pred[0])
+        adj_r2_test = 1 - (1 - r2_test) * (len(self.X_test) - 1) / (len(self.X_test) - len(self.X_test[0,:] - 1))
 
-        return (mae, rmse, r2, adj_r2)
+        mae_train = mean_absolute_error(self.y_train, y_pred[1])
+        rmse_train = mean_squared_error(self.y_train, y_pred[1], squared=False)
+        r2_train = r2_score(self.y_train, y_pred[1])
+        adj_r2_train = 1 - (1 - r2_train) * (len(self.X_test) - 1) / (len(self.X_test) - len(self.X_test[0,:] - 1))
+
+        return (mae_test, mae_train, rmse_test, rmse_train, r2_test, r2_train, adj_r2_test, adj_r2_train)
