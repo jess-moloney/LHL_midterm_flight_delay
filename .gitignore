@@ -156,3 +156,4 @@ cython_debug/
 *.csv
 *.psql
 *.DS_Store
+*.pickle
