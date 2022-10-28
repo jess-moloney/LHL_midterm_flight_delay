@@ -44,7 +44,7 @@ class lhl_delay_data:
             query += f'SELECT SETSEED({self.seed}); '
         query += f'SELECT * FROM {table} '
        
-        if table != 'flights' or table != 'flights_test':
+        if table != 'flights' and table != 'flights_test':
             query += f'WHERE {table}.unique_carrier IN (SELECT op_unique_carrier FROM flights) '
         query += f'ORDER BY RANDOM() LIMIT {samples};'
 
