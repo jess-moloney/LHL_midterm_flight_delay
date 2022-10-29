@@ -7,8 +7,8 @@ In our midterm project we are looking to predict the delay of flights arriving i
 
 ## Process
 
-![My Image](images\workflow.png)
+![workflow](images/workflow.png)
 
 ## Results
 
-Refer to [submission.csv](data\submission.csv) for model predictions on flights_test data.
+Refer to [submission.csv](data/submission.csv) for model predictions on flights_test data.
