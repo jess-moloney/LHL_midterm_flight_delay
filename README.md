@@ -9,6 +9,8 @@ In our midterm project we are looking to predict the delay of flights arriving i
 
 ## Results
 
+Please see data folder for submission.csv
+
 ## Challenges
 
 ## Feature Goals
